@@ -1,0 +1,26 @@
+# Root .gitignore for SFC-Atlas monorepo
+
+# Node modules (in both frontend and backend)
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Environment files (NEVER commit secrets)
+.env
+frontend/.env
+backend/.env
+
+# Build output
+frontend/dist/
+frontend/.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Vercel local dev
+.vercel/
