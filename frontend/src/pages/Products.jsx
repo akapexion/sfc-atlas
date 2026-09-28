@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES_LIST } from '../data/mockData';
 import PreOrderModal from '../components/PreOrderModal';
+import AuthModal from '../components/AuthModal';
 import { 
   Search, 
   Filter, 
@@ -21,26 +21,40 @@ import {
  */
 export default function Products() {
   const { products, markets } = useApp();
-  const navigate = useNavigate();
 
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMarketId, setSelectedMarketId] = useState('All');
   const [sortBy, setSortBy] = useState('featured');
   const [activePreOrderProduct, setActivePreOrderProduct] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState('login');
+  // Product waiting to be pre-ordered after the user logs in
+  const [pendingProduct, setPendingProduct] = useState(null);
 
   const handlePreOrderClick = (product) => {
     const isLoggedIn = Boolean(
-      localStorage.getItem('marketlink_user_name') || 
+      localStorage.getItem('marketlink_user_name') ||
       localStorage.getItem('marketlink_user_email')
     );
 
     if (!isLoggedIn) {
-      navigate('/login?mode=login');
+      setPendingProduct(product);
+      setAuthModalMode('login');
+      setShowAuthModal(true);
       return;
     }
 
     setActivePreOrderProduct(product);
+  };
+
+  // Called after successful auth in the modal — open the pre-order for the pending product
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    if (pendingProduct) {
+      setActivePreOrderProduct(pendingProduct);
+      setPendingProduct(null);
+    }
   };
 
   // Filter & Sort Logic
@@ -301,6 +315,16 @@ export default function Products() {
         <PreOrderModal
           product={activePreOrderProduct}
           onClose={() => setActivePreOrderProduct(null)}
+        />
+      )}
+
+      {/* Auth Modal — shown to guest users who click Pre-Order */}
+      {showAuthModal && (
+        <AuthModal
+          initialMode={authModalMode}
+          productName={pendingProduct?.name}
+          onClose={() => { setShowAuthModal(false); setPendingProduct(null); }}
+          onSuccess={handleAuthSuccess}
         />
       )}
 

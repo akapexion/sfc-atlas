@@ -6,8 +6,6 @@ import {
   Lock, 
   User, 
   Phone, 
-  Store, 
-  ShieldCheck, 
   ArrowRight, 
   CheckCircle2, 
   AlertCircle,
@@ -234,7 +232,7 @@ export default function Login() {
               <Sparkles size={13} className="text-green-600" />
               Quick Demo Fill (Select Account Role):
             </span>
-            <div className="grid grid-cols-3 gap-1.5 text-[11px]">
+            <div className="grid grid-cols-2 gap-1.5 text-[11px]">
               <button
                 type="button"
                 onClick={() => handleQuickDemoFill('vendor')}
@@ -258,18 +256,6 @@ export default function Login() {
               >
                 <ShoppingBag size={12} />
                 <span>Customer</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickDemoFill('admin')}
-                className={`px-2 py-1.5 rounded-lg border font-semibold transition flex items-center justify-center gap-1 ${
-                  role === 'admin'
-                    ? 'bg-green-600 text-white border-green-600'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-                }`}
-              >
-                <ShieldCheck size={12} />
-                <span>Admin</span>
               </button>
             </div>
           </div>
@@ -421,9 +407,8 @@ export default function Login() {
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full text-xs px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="vendor">Farmer / Produce Vendor</option>
+              <option value="vendor">Farmer / Produce Vendor</option>
                 <option value="customer">Community Shopper / Customer</option>
-                <option value="admin">Platform Administrator</option>
               </select>
             </div>
 
